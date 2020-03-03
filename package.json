@@ -1,0 +1,117 @@
+{
+  "name": "heroku-guard-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "env-cmd nodemon src/server.ts",
+    "build": "shx rm -rf ./dist && tsc && shx cp -r ./src/views ./dist/views",
+    "prepare": "shx cp -n ./.env.js.example ./.env.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
+    "@types/express": "^4.17.2",
+    "@types/nodemailer": "^6.4.0",
+    "@types/nunjucks": "^3.1.3",
+    "@types/uuid": "^7.0.0",
+    "@types/yup": "^0.26.32",
+    "@typescript-eslint/eslint-plugin": "^2.19.2",
+    "del-cli": "^3.0.0",
+    "env-cmd": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-typescript": "^7.0.0",
+    "eslint-plugin-eslint-comments": "^3.1.2",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-unicorn": "^16.1.1",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.7",
+    "nodemon": "^2.0.2",
+    "npm-run-all": "^4.1.5",
+    "shx": "^0.3.2",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "cookie-parser": "^1.4.4",
+    "date-fns": "^2.10.0",
+    "express": "^4.17.1",
+    "nodemailer": "^6.4.4",
+    "nunjucks": "^3.2.0",
+    "parse-domain": "^2.3.4",
+    "pg": "^7.18.2",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.22",
+    "uuid": "^3.4.0",
+    "yup": "^0.28.1"
+  },
+  "husky": {
+    "hooks": {
+      "post-merge": "npm i",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": "npm run lint:scripts",
+    "*.{css,scss}": "npm run lint:styles"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src",
+      "./.env.js"
+    ],
+    "ext": "js,ts,json,njk",
+    "execMap": {
+      "ts": "node --require ts-node/register"
+    }
+  },
+  "eslintConfig": {
+    "plugins": [
+      "@typescript-eslint",
+      "eslint-comments",
+      "promise",
+      "unicorn"
+    ],
+    "extends": [
+      "airbnb-typescript/base",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:eslint-comments/recommended",
+      "plugin:promise/recommended",
+      "plugin:unicorn/recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    ],
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "env": {
+      "node": true
+    },
+    "rules": {
+      "unicorn/filename-case": [
+        "error",
+        {
+          "case": "camelCase"
+        }
+      ]
+    }
+  },
+  "eslintIgnore": [
+    "dist/**/*"
+  ],
+  "stylelint": {
+    "extends": [
+      "stylelint-config-twbs-bootstrap/scss"
+    ]
+  },
+  "release-it": {
+    "npm": {
+      "publish": false
+    }
+  }
+}
