@@ -18,7 +18,6 @@ type TStatusMessage = {
 const {
   env: {
     WHITE_LISTED_EMAIL_DOMAINS = required('WHITE_LISTED_EMAIL_DOMAINS'),
-    HOSTNAME = required('HOSTNAME'),
     APP_NAME = required('APP_NAME'),
   },
 } = process;
@@ -57,6 +56,8 @@ export default Router()
         email,
         password,
       },
+      hostname,
+      protocol,
     } = request;
 
     const existingUser = await User.findOne({ email });
@@ -90,7 +91,7 @@ export default Router()
           <p>
             To activate your user please click
             <strong>
-                <a href="${HOSTNAME}/activate/${user.activationCode}" target="_blank">
+                <a href="${protocol}://${hostname}/activate/${user.activationCode}" target="_blank">
                     HERE
                 </a>
             </strong>

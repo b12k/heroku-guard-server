@@ -1,3 +1,74 @@
 {
-
+  "addons": [
+    "heroku-postgresql:hobby-dev"
+  ],
+  "scripts": {
+    "postdeploy": "hrcd-postdeploy",
+    "pr-predestroy": "hrcd-predestroy"
+  },
+  "env": {
+    "APP_NAME": {
+      "required": true,
+      "value": "B12K Guard"
+    },
+    "NODE_ENV": {
+      "required": true,
+      "value": "production"
+    },
+    "SERVER_ENV": {
+      "required": true,
+      "value": "development"
+    },
+    "SECRET": {
+      "required": true,
+      "generator": "secret"
+    },
+    "GUARD_COOKIE_NAME": {
+      "required": true,
+      "value": "B12K_GUARD_TOKEN"
+    },
+    "GUARD_COOKIE_TTL_DAYS": {
+      "required": true,
+      "value": "7"
+    },
+    "PORT": {
+      "required": true
+    },
+    "WHITE_LISTED_EMAIL_DOMAINS": {
+      "required": true
+    },
+    "DATABASE_URL": {
+      "required": true
+    },
+    "NODEMAILER_SMTP_URL": {
+      "required": true
+    },
+    "NODEMAILER_FROM": {
+      "required": true
+    },
+    "HRCD_DOMAINS": {
+      "required": true
+    },
+    "HRCD_HEROKU_TOKEN_B64": {
+      "required": true
+    },
+    "HRCD_CLOUDFLARE_ZONE_ID": {
+      "required": true
+    },
+    "HRCD_CLOUDFLARE_TOKEN_B64": {
+      "required": true
+    },
+    "HRCD_GITHUB_TOKEN_B64": {
+      "required": true
+    },
+    "HRCD_GITHUB_REPOSITORY": {
+      "required": true
+    },
+    "HEROKU_PR_NUMBER": {
+      "required": true
+    },
+    "HEROKU_APP_NAME": {
+      "required": true
+    }
+  }
 }
