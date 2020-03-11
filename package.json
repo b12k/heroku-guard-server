@@ -6,8 +6,12 @@
   "scripts": {
     "start": "node dist/server.js",
     "start:local": "env-cmd node dist/server.js",
-    "dev": "env-cmd nodemon src/server.ts",
-    "build": "shx rm -rf ./dist && tsc && shx cp -r ./src/views ./dist/views",
+    "dev": "env-cmd nodemon ./src/server.ts",
+    "build": "run-s clean compile && run-p copy:*",
+    "compile": "tsc",
+    "clean": "shx rm -rf ./dist",
+    "copy:public": "shx cp -r ./src/public ./dist/public",
+    "copy:view": "shx cp -r ./src/views ./dist/views",
     "prepare": "shx cp -n ./.env.js.example ./.env.js"
   },
   "keywords": [],
@@ -64,11 +68,11 @@
   },
   "nodemonConfig": {
     "watch": [
-      "src"
+      "./src"
     ],
     "ext": "js,ts,json,njk",
     "execMap": {
-      "ts": "node --require ts-node/register"
+      "ts": "ts-node"
     }
   },
   "eslintConfig": {

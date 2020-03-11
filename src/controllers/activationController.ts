@@ -1,56 +1,41 @@
 import {
   Request,
   Response,
-  Router,
 } from 'express';
-import { v4 as uuid } from 'uuid';
-import { addDays } from 'date-fns';
-import parseDomain from 'parse-domain';
 
+import { User } from '../models';
+import { generateUserToken } from '../services';
 import {
-  User,
-  Token,
-} from '../models';
-import { required } from '../helpers';
+  required,
+  ErrorUserNotFound,
+  getCookieDomain,
+} from '../helpers';
 
 const {
   env: {
     GUARD_COOKIE_NAME = required('GUARD_COOKIE_NAME'),
-    GUARD_COOKIE_TTL_DAYS = required('GUARD_COOKIE_TTL_DAYS'),
   },
 } = process;
 
-export default Router()
-  .get('/:activationCode', async (request: Request, response: Response): Promise<Response | void> => {
-    const {
-      params: {
-        activationCode,
-      },
-      hostname,
-    } = request;
+export default async (request: Request, response: Response): Promise<void> => {
+  const {
+    params: {
+      activationCode,
+    },
+    hostname,
+  } = request;
 
-    const user: User | undefined = await User.findOne({ activationCode });
-    if (!user) return response.status(404).send('Not Found');
-    if (user.isActive) return response.status(403).send('Already Activated');
+  const user = await User.findOne({ activationCode });
+  if (user === undefined) throw new ErrorUserNotFound();
+  user.isActive = true;
+  await user.save();
 
-    let cookieDomain = hostname;
-    const parsedHostname = parseDomain(hostname);
-    if (parsedHostname) {
-      cookieDomain = `.${parsedHostname.domain}.${parsedHostname.tld}`;
-    }
-    const token = new Token();
-    token.value = uuid();
-    token.expiresAt = addDays(new Date(), Number(GUARD_COOKIE_TTL_DAYS));
-    await token.save();
+  const token = await generateUserToken(user);
 
-    user.isActive = true;
-    user.tokens = [token];
-    await user.save();
-
-    return response
-      .cookie(GUARD_COOKIE_NAME, token.value, {
-        domain: cookieDomain,
-        expires: token.expiresAt,
-      })
-      .redirect(302, '/?activated=true');
-  });
+  return response
+    .cookie(GUARD_COOKIE_NAME, token.value, {
+      domain: getCookieDomain(hostname),
+      expires: token.expiresAt,
+    })
+    .redirect(302, '/');
+};
