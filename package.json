@@ -60,8 +60,19 @@
     "uuid": "7.0.2",
     "yup": "0.28.3"
   },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "husky": {
     "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "post-merge": "npm i",
       "pre-commit": "lint-staged"
     }
