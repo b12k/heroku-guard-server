@@ -52,7 +52,7 @@
     "parse-domain": "2.3.4",
     "pg": "7.18.2",
     "reflect-metadata": "0.1.13",
-    "typeorm": "0.2.22",
+    "typeorm": "0.2.25",
     "uuid": "3.4.0",
     "yup": "0.28.1"
   },
